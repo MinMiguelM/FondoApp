@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">FondoApp</string>
+
+    <!-- Default names application -->
+
+    <!-- titles activities -->
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- names for loginActivity -->
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+
+    <!-- Errors and messages -->
+    <string name="error_field_required">This field is required</string>
+    <string name="error_authentication">The username or password are incorrect</string>
+    <string name="error_connection_failed">Failed connection</string>
+    <string name="msg_authentication">Authenticating...</string>
+
+    <!-- names for mainActivity -->
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

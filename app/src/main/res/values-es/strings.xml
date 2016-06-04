@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">FondoApp</string>
+
+    <!-- Nombres cuando el idioma está en español -->
+
+    <!-- titles activities -->
+    <string name="title_activity_main">MainActivity</string>
+
+    <!-- names for loginActivity -->
+    <string name="username">Usuario</string>
+    <string name="password">Contraseña</string>
+    <string name="login">Ingresar</string>
+
+    <!-- Errors and messages -->
+    <string name="error_field_required">Este campo es requerido</string>
+    <string name="error_authentication">El usuario o contraseña son incorrectos</string>
+    <string name="error_connection_failed">Connexión fallida</string>
+    <string name="msg_authentication">Autenticando</string>
+
+    <!-- names for mainActivity -->
+    <string name="navigation_drawer_open">Abrir barra lateral</string>
+    <string name="navigation_drawer_close">Cerrar barra lateral</string>
+
+    <string name="action_settings">Ajustes</string>
+</resources>
