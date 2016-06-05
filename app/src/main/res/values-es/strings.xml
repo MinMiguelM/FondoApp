@@ -4,7 +4,9 @@
     <!-- Nombres cuando el idioma está en español -->
 
     <!-- titles activities -->
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Menú principal</string>
+    <string name="title_activity_request">RequestActivity</string>
+    <string name="title_activity_create_request">CreateRequestActivity</string>
 
     <!-- names for loginActivity -->
     <string name="username">Usuario</string>
@@ -20,6 +22,20 @@
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
     <string name="navigation_drawer_close">Cerrar barra lateral</string>
+    <string name="my_requests">Mis solicitudes</string>
+    <string name="my_requests_desc">Mis envíos</string>
+    <string name="all_requests">Solicitudes</string>
+    <string name="all_requests_desc">Solicitudes enviadas</string>
 
-    <string name="action_settings">Ajustes</string>
+    <!-- names for requestActivity -->
+
+    <!-- names for createRequestActivity -->
+    <string name="complete_name">Nombre completo</string>
+    <string name="amount_money">Valor a solicitar</string>
+    <string name="time_limit">Plazo</string>
+    <string name="info_additional">Información adicional. Máx 180 caracteres</string>
+    <string name="send">Enviar</string>
+
+    <!-- names for nav header -->
+    <string name="sign_out">Cerrar sesión</string>
 </resources>
