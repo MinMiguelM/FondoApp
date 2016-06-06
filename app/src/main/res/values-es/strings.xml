@@ -4,7 +4,9 @@
     <!-- Nombres cuando el idioma está en español -->
 
     <!-- titles activities -->
-    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_main">Menú principal</string>
+    <string name="title_activity_request">Mis solicitudes</string>
+    <string name="title_activity_create_request">Crear solicitud</string>
 
     <!-- names for loginActivity -->
     <string name="username">Usuario</string>
@@ -15,11 +17,39 @@
     <string name="error_field_required">Este campo es requerido</string>
     <string name="error_authentication">El usuario o contraseña son incorrectos</string>
     <string name="error_connection_failed">Connexión fallida</string>
-    <string name="msg_authentication">Autenticando</string>
+    <string name="msg_authentication">Autenticando...</string>
+    <string name="error_field_fee">Debes seleccionar un tipo de cuota</string>
+    <string name="error_field_payment">Debes seleccionar un tipo de abono</string>
+    <string name="msg_sending">Enviando...</string>
+    <string name="msg_notify">Transacción realizada</string>
+    <string name="msg_notify_title">Éxito</string>
+    <string name="msg_request_arrived_title">Nueva solicitud</string>
+    <string name="msg_request_arrived">Una nueva solicitud ha llegado</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
     <string name="navigation_drawer_close">Cerrar barra lateral</string>
+    <string name="my_requests">Mis solicitudes</string>
+    <string name="my_requests_desc">Mis envíos</string>
+    <string name="all_requests">Solicitudes</string>
+    <string name="all_requests_desc">Solicitudes enviadas</string>
 
-    <string name="action_settings">Ajustes</string>
+    <!-- names for requestActivity -->
+
+    <!-- names for createRequestActivity -->
+    <string name="complete_name">Nombre completo</string>
+    <string name="amount_money">Valor a solicitar</string>
+    <string name="time_limit">Plazo</string>
+    <string name="date_disbursement">Fecha de desembolso</string>
+    <string name="info_additional">Información adicional. Máx 180 caracteres</string>
+    <string name="send">Enviar</string>
+    <string name="fee">Cuota</string>
+    <string name="fee_monthly">Mensual</string>
+    <string name="fee_unique">Única</string>
+    <string name="payment">Abono</string>
+    <string name="payment_cash">Efectivo</string>
+    <string name="payment_account">Cuenta</string>
+
+    <!-- names for nav header -->
+    <string name="sign_out">Cerrar sesión</string>
 </resources>

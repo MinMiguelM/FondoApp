@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Actions>
+    <actionData>
+        <id>1</id>
+        <title>my_requests</title>
+        <desc>my_requests_desc</desc>
+        <img>icon_requests</img>
+    </actionData>
+    <actionData>
+        <id>2</id>
+        <title>all_requests</title>
+        <desc>all_requests_desc</desc>
+        <img>icon_sended_requests</img>
+    </actionData>
+</Actions>
