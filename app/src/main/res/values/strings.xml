@@ -35,6 +35,12 @@
     <string name="time_limit">Time limit</string>
     <string name="info_additional">Put additional information. Max 180 characters</string>
     <string name="send">Send</string>
+    <string name="fee">Fee</string>
+    <string name="fee_monthly">Monthly</string>
+    <string name="fee_unique">Unique</string>
+    <string name="payment">Payment</string>
+    <string name="payment_cash">Cash</string>
+    <string name="payment_account">Account</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Sign out</string>

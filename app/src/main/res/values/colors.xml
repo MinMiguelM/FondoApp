@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="white">#ffffff</color>
     <color name="login_blue">#40AEF9</color>
+    <color name="background">#D5DDE0</color>
 </resources>

@@ -35,6 +35,12 @@
     <string name="time_limit">Plazo</string>
     <string name="info_additional">Información adicional. Máx 180 caracteres</string>
     <string name="send">Enviar</string>
+    <string name="fee">Cuota</string>
+    <string name="fee_monthly">Mensual</string>
+    <string name="fee_unique">Única</string>
+    <string name="payment">Abono</string>
+    <string name="payment_cash">Efectivo</string>
+    <string name="payment_account">Cuenta</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Cerrar sesión</string>

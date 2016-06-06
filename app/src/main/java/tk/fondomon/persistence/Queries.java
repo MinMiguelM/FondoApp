@@ -6,11 +6,11 @@ package tk.fondomon.persistence;
 public class Queries {
 
     // Host where is the server
-    final static String HOST = "https://fondomon-minmiguelm.c9users.io";
+    final static String HOST = "http://192.168.0.15";
 
     // Port of the server, here the server receive the requests
     final static String PORT = "8181";
 
     // Queries with the URL mapping
-    final static String GET_USER_BY_USERNAME = HOST + ":" + PORT + "/user/getByUsername/";
+    final static String GET_USER_BY_USERNAME = HOST + ":" + PORT + "/members/getByMemberName/";
 }
