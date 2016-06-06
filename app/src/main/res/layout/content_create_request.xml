@@ -66,6 +66,7 @@
                 <EditText
                     android:id="@+id/disbursement"
                     android:layout_width="fill_parent"
+                    android:hint="@string/date_disbursement"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
                     android:inputType="date"/>
@@ -83,11 +84,10 @@
                     android:ems="10"
                     android:hint="@string/info_additional"
                     android:imeOptions="actionDone"
-                    android:inputType="textCapSentences"
+                    android:inputType="textMultiLine"
                     android:lines="5"
                     android:maxLength="180"
-                    android:padding="5dp"
-                    android:singleLine="false" />
+                    android:padding="5dp"/>
                 <Button
                     android:id="@+id/button_save"
                     android:layout_width="fill_parent"

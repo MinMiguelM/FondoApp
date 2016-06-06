@@ -72,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * show a message in the actual context
      */
-    public void showError( String nameError, String detail) {
+    public void showMessage( String nameError, String detail) {
         AlertDialog alert = new AlertDialog.Builder(LoginActivity.this).create();
         alert.setTitle(nameError);
         alert.setMessage(detail);
@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 startActivity(intent);
             } else {
-                showError(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
             }
         }
 

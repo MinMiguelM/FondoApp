@@ -5,8 +5,8 @@
 
     <!-- titles activities -->
     <string name="title_activity_main">Main menu</string>
-    <string name="title_activity_request">RequestActivity</string>
-    <string name="title_activity_create_request">CreateRequestActivity</string>
+    <string name="title_activity_request">My requests</string>
+    <string name="title_activity_create_request">Create request</string>
 
     <!-- names for loginActivity -->
     <string name="username">Username</string>
@@ -18,6 +18,13 @@
     <string name="error_authentication">The username or password are incorrect</string>
     <string name="error_connection_failed">Failed connection</string>
     <string name="msg_authentication">Authenticating...</string>
+    <string name="error_field_fee">You must choose a kind of fee</string>
+    <string name="error_field_payment">You must choose a kind of payment</string>
+    <string name="msg_sending">Sending...</string>
+    <string name="msg_notify">Done transaction</string>
+    <string name="msg_notify_title">Success</string>
+    <string name="msg_request_arrived_title">New request</string>
+    <string name="msg_request_arrived">A new request has arrived</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -33,6 +40,7 @@
     <string name="complete_name">Complete name</string>
     <string name="amount_money">Value of the loan</string>
     <string name="time_limit">Time limit</string>
+    <string name="date_disbursement">Disbursement date</string>
     <string name="info_additional">Put additional information. Max 180 characters</string>
     <string name="send">Send</string>
     <string name="fee">Fee</string>
