@@ -2,6 +2,8 @@ package tk.fondomon.activities;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -20,10 +22,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import tk.fondomon.entities.SmfMember;
@@ -33,24 +41,28 @@ public class CreateRequestActivity extends AppCompatActivity {
     private String fee;
     private String payment;
 
-    private EditText completeName;
     private EditText money;
     private EditText time;
-    private EditText disbursement;
     private EditText infAdditional;
     private Spinner spinnerFee;
     private Spinner spinnerPayment;
+    private ProgressDialog progress;
+    private SmfMember user;
+    private TextView dateDisbursement;
+
+    private int month, day, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_request);
 
-        completeName = (EditText)findViewById(R.id.completeName);
+        user = (SmfMember) getIntent().getExtras().getSerializable("user");
+
         money = (EditText)findViewById(R.id.money_requested);
         time = (EditText)findViewById(R.id.time_limit);
-        disbursement = (EditText)findViewById(R.id.disbursement);
         infAdditional = (EditText)findViewById(R.id.inf_additional);
+        dateDisbursement = (TextView)findViewById(R.id.disbursement);
         // ------------------------------------------------------------------
         spinnerFee = (Spinner)findViewById(R.id.spinnerFee);
         spinnerFee.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -66,7 +78,6 @@ public class CreateRequestActivity extends AppCompatActivity {
         });
 
         List<String> categoriesFee = new ArrayList<>();
-        categoriesFee.add(getString(R.string.fee));
         categoriesFee.add(getString(R.string.fee_monthly));
         categoriesFee.add(getString(R.string.fee_unique));
 
@@ -90,7 +101,6 @@ public class CreateRequestActivity extends AppCompatActivity {
         });
 
         List<String> categoriesPayment = new ArrayList<>();
-        categoriesPayment.add(getString(R.string.payment));
         categoriesPayment.add(getString(R.string.payment_account));
         categoriesPayment.add(getString(R.string.payment_cash));
 
@@ -107,7 +117,46 @@ public class CreateRequestActivity extends AppCompatActivity {
                 sendRequest();
             }
         });
+
+        ((TextView)findViewById(R.id.real_name)).setText(getString(R.string.real_name)+": "+user.getRealName());
+
+        Calendar calendar = Calendar.getInstance();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        Button datePicker = (Button) findViewById(R.id.date);
+        datePicker.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setDate(v);
+            }
+        });
     }
+
+    @SuppressWarnings("deprecation")
+    public void setDate(View view) {
+        showDialog(999);
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        if (id == 999) {
+            return new DatePickerDialog(this, myDateListener, year, month, day);
+        }
+        return null;
+    }
+
+    private DatePickerDialog.OnDateSetListener myDateListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker arg0, int arg1, int arg2, int arg3) {
+            // arg1 = year
+            // arg2 = month
+            // arg3 = day
+            String date = arg3+"/"+(arg2+1)+"/"+arg1;
+            dateDisbursement.setText(date);
+        }
+    };
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -126,20 +175,15 @@ public class CreateRequestActivity extends AppCompatActivity {
     }
 
     public void sendRequest(){
-        String name = completeName.getText().toString();
         String moneyStr = money.getText().toString();
         String timeStr = time.getText().toString();
-        String disbursementStr = disbursement.getText().toString();
+        String dateStr = dateDisbursement.getText().toString();
         String inf = infAdditional.getText().toString();
 
         View focusView = null;
         boolean cancel = false;
 
-        if(TextUtils.isEmpty(name)){
-            completeName.setError(getString(R.string.error_field_required));
-            focusView = completeName;
-            cancel = true;
-        }else if(TextUtils.isEmpty(moneyStr)){
+        if(TextUtils.isEmpty(moneyStr)){
             money.setError(getString(R.string.error_field_required));
             focusView = money;
             cancel = true;
@@ -147,17 +191,9 @@ public class CreateRequestActivity extends AppCompatActivity {
             time.setError(getString(R.string.error_field_required));
             focusView = time;
             cancel = true;
-        } else if(fee.equals(getString(R.string.fee))){
-            showMessage("Error", getString(R.string.error_field_fee));
-            focusView = spinnerFee;
-            cancel = true;
-        } else if(TextUtils.isEmpty(disbursementStr)){
-            disbursement.setError(getString(R.string.error_field_required));
-            focusView = disbursement;
-            cancel = true;
-        } else if(payment.equals(getString(R.string.payment))){
-            showMessage("Error", getString(R.string.error_field_payment));
-            focusView = spinnerPayment;
+        }else if(dateStr.equals(getString(R.string.date_disbursement))){
+            showMessage("Error",getString(R.string.error_field_date_disbursement));
+            focusView = dateDisbursement;
             cancel = true;
         }
 
@@ -165,11 +201,11 @@ public class CreateRequestActivity extends AppCompatActivity {
             focusView.requestFocus();
         else{
             showProgress(getString(R.string.msg_sending),true);
-            PublishRequestTask publishTask = new PublishRequestTask(null);
+            PublishRequestTask publishTask = new PublishRequestTask(user);
             publishTask.execute();
             // Connection with the server, authentication
 
-            NotificationCompat.Builder mBuilder =
+            /*NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(this)
                             .setSmallIcon(R.drawable.ic_menu_send)
                             .setContentTitle("My notification")
@@ -195,7 +231,7 @@ public class CreateRequestActivity extends AppCompatActivity {
             NotificationManager mNotificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             // mId allows you to update the notification later on.
-            mNotificationManager.notify(1, mBuilder.build());
+            mNotificationManager.notify(1, mBuilder.build());*/
         }
     }
 
@@ -214,9 +250,10 @@ public class CreateRequestActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(String message, boolean show){
-        ProgressDialog progress = ProgressDialog.show(CreateRequestActivity.this, null, message, true);
         if(!show)
             progress.dismiss();
+        else
+            progress = ProgressDialog.show(CreateRequestActivity.this, null, message, true);
     }
 
     /**
@@ -254,6 +291,7 @@ public class CreateRequestActivity extends AppCompatActivity {
                     showMessage(getString(R.string.msg_notify_title), getString(R.string.msg_notify));
                     Thread.sleep(2000);
                     Intent intent = new Intent(CreateRequestActivity.this, MainActivity.class);
+                    intent.putExtra("user",user);
                     startActivity(intent);
                 } else {
                     showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));

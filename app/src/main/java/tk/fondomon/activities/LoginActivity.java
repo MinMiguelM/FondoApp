@@ -3,7 +3,9 @@ package tk.fondomon.activities;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +15,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+import tk.fondomon.entities.SmfMember;
+import tk.fondomon.persistence.Queries;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button login_button;
     private EditText mPasswordView;
     private EditText mUsernameView;
+
+    private SmfMember user=null;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +51,24 @@ public class LoginActivity extends AppCompatActivity {
                 loginAction();
             }
         });
+    }
+
+    /**
+     * Check if there is an user log in, if it is, launch the main.
+     */
+    @Override
+    public void onStart(){
+        super.onStart();
+        Gson gson = new Gson();
+        SharedPreferences settings;
+        settings = getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+        String json = settings.getString("user", null);
+        user = gson.fromJson(json,SmfMember.class);
+        if(user!=null){
+            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+            intent.putExtra("user",user);
+            startActivity(intent);
+        }
     }
 
     /**
@@ -64,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
         else{
             showProgress(getString(R.string.msg_authentication),true);
             UserLoginTask loginTask = new UserLoginTask(username,password);
-            loginTask.execute();
+            loginTask.execute(username,password);
             // Connection with the server, authentication
         }
     }
@@ -84,16 +119,17 @@ public class LoginActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(String message, boolean show){
-        ProgressDialog progress = ProgressDialog.show(LoginActivity.this, null, message, true);
         if(!show)
             progress.dismiss();
+        else
+            progress = ProgressDialog.show(LoginActivity.this, null, message, true);
     }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
 
         private final String mUsername;
         private final String mPassword;
@@ -103,19 +139,43 @@ public class LoginActivity extends AppCompatActivity {
             mPassword = password;
         }
 
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
+        public String byteArrayToHex(byte[] a) {
+            StringBuilder sb = new StringBuilder(a.length * 2);
+            for(byte b: a)
+                sb.append(String.format("%02x", b & 0xff));
+            return sb.toString();
+        }
 
+        @Override
+        protected Boolean doInBackground(String... params) {
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                //Thread.sleep(2000);
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + params[0], SmfMember.class, "Android");
+
+                if(user == null)
+                    return false;
+
+                MessageDigest pass = MessageDigest.getInstance("SHA-1");
+                pass.reset();
+                pass.update((params[0].toLowerCase().trim()+params[1]).getBytes("UTF-8"));
+
+                String sha1Pass = byteArrayToHex(pass.digest());
+                if(sha1Pass.equals(user.getPasswd())) {
+                    Gson gson = new Gson();
+                    SharedPreferences preferencesUser = getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferencesUser.edit();
+                    editor.putString("user", gson.toJson(user));
+                    editor.commit();
+                    return true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
-
-            // TODO: register the new account here.
-            return true;
+            return false;
         }
 
         @Override
@@ -124,6 +184,7 @@ public class LoginActivity extends AppCompatActivity {
 
             if (success) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
             } else {
                 showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));

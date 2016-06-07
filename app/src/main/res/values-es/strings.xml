@@ -25,6 +25,8 @@
     <string name="msg_notify_title">Éxito</string>
     <string name="msg_request_arrived_title">Nueva solicitud</string>
     <string name="msg_request_arrived">Una nueva solicitud ha llegado</string>
+    <string name="msg_loading">Cargando...</string>
+    <string name="error_field_date_disbursement">Seleccione una fecha de desembolso</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
@@ -37,10 +39,11 @@
     <!-- names for requestActivity -->
 
     <!-- names for createRequestActivity -->
-    <string name="complete_name">Nombre completo</string>
+    <string name="real_name">Solicitante</string>
     <string name="amount_money">Valor a solicitar</string>
     <string name="time_limit">Plazo</string>
     <string name="date_disbursement">Fecha de desembolso</string>
+    <string name="set_date">Cambiar fecha</string>
     <string name="info_additional">Información adicional. Máx 180 caracteres</string>
     <string name="send">Enviar</string>
     <string name="fee">Cuota</string>

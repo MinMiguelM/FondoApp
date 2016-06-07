@@ -25,6 +25,8 @@
     <string name="msg_notify_title">Success</string>
     <string name="msg_request_arrived_title">New request</string>
     <string name="msg_request_arrived">A new request has arrived</string>
+    <string name="msg_loading">Loading...</string>
+    <string name="error_field_date_disbursement">Choose a disbursement date</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -37,10 +39,11 @@
     <!-- names for requestActivity -->
 
     <!-- names for createRequestActivity -->
-    <string name="complete_name">Complete name</string>
+    <string name="real_name">Applicant</string>
     <string name="amount_money">Value of the loan</string>
     <string name="time_limit">Time limit</string>
     <string name="date_disbursement">Disbursement date</string>
+    <string name="set_date">Set date</string>
     <string name="info_additional">Put additional information. Max 180 characters</string>
     <string name="send">Send</string>
     <string name="fee">Fee</string>

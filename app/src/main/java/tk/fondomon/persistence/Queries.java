@@ -12,5 +12,8 @@ public class Queries {
     final static String PORT = "8181";
 
     // Queries with the URL mapping
-    final static String GET_USER_BY_USERNAME = HOST + ":" + PORT + "/members/getByMemberName/";
+    public static final String GET_USER_BY_USERNAME = HOST + ":" + PORT + "/members/getByMemberName/";
+    public static final String GET_REQUESTS_BY_IDMEMBER = HOST + ":" + PORT + "/requests/getByIdMember/";
+    public static final String INSERT_REQUEST = HOST + ":" + PORT + "/requests/add";
+    public static final String GET_ALL_REQUESTS = HOST + ":" + PORT + "/requests/getAll";
 }
