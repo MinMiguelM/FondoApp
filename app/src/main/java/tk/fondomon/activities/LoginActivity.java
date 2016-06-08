@@ -17,12 +17,18 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 
+import org.springframework.http.HttpMessage;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 
 import java.math.BigInteger;
+import java.net.ConnectException;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
 
 import tk.fondomon.entities.SmfMember;
 import tk.fondomon.persistence.Queries;
@@ -65,10 +71,26 @@ public class LoginActivity extends AppCompatActivity {
         String json = settings.getString("user", null);
         user = gson.fromJson(json,SmfMember.class);
         if(user!=null){
-            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
-            intent.putExtra("user",user);
-            startActivity(intent);
+            showProgress(getString(R.string.msg_loading),true);
+            UserLoginTask task = new UserLoginTask(user.getMemberName(),user.getPasswd());
+            try {
+                task.execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    /**
+     * Convert a byte array to hex
+     */
+    public String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
     }
 
     /**
@@ -98,9 +120,17 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         else{
             showProgress(getString(R.string.msg_authentication),true);
-            UserLoginTask loginTask = new UserLoginTask(username,password);
-            loginTask.execute(username,password);
-            // Connection with the server, authentication
+            MessageDigest pass = null;
+            try {
+                pass = MessageDigest.getInstance("SHA-1");
+                pass.reset();
+                pass.update((username.toLowerCase().trim() + password).getBytes("UTF-8"));
+                String sha1Pass = byteArrayToHex(pass.digest());
+                UserLoginTask loginTask = new UserLoginTask(username,sha1Pass);
+                loginTask.execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -122,7 +152,7 @@ public class LoginActivity extends AppCompatActivity {
         if(!show)
             progress.dismiss();
         else
-            progress = ProgressDialog.show(LoginActivity.this, null, message, true);
+            progress = ProgressDialog.show(this, null, message, true);
     }
 
     /**
@@ -133,17 +163,11 @@ public class LoginActivity extends AppCompatActivity {
 
         private final String mUsername;
         private final String mPassword;
+        private int state;
 
         UserLoginTask(String username, String password) {
             mUsername = username;
             mPassword = password;
-        }
-
-        public String byteArrayToHex(byte[] a) {
-            StringBuilder sb = new StringBuilder(a.length * 2);
-            for(byte b: a)
-                sb.append(String.format("%02x", b & 0xff));
-            return sb.toString();
         }
 
         @Override
@@ -153,17 +177,13 @@ public class LoginActivity extends AppCompatActivity {
                 //Thread.sleep(2000);
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + params[0], SmfMember.class, "Android");
+                user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + mUsername, SmfMember.class, "Android");
 
-                if(user == null)
+                if (user == null) {
+                    state = 1;
                     return false;
-
-                MessageDigest pass = MessageDigest.getInstance("SHA-1");
-                pass.reset();
-                pass.update((params[0].toLowerCase().trim()+params[1]).getBytes("UTF-8"));
-
-                String sha1Pass = byteArrayToHex(pass.digest());
-                if(sha1Pass.equals(user.getPasswd())) {
+                }
+                if (mPassword.equals(user.getPasswd())) {
                     Gson gson = new Gson();
                     SharedPreferences preferencesUser = getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferencesUser.edit();
@@ -171,10 +191,15 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();
                     return true;
                 }
+            } catch (ResourceAccessException ex){
+                ex.printStackTrace();
+                state = 2;
+                return false;
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }
+            state = 1;
             return false;
         }
 
@@ -187,7 +212,18 @@ public class LoginActivity extends AppCompatActivity {
                 intent.putExtra("user",user);
                 startActivity(intent);
             } else {
-                showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                SharedPreferences settings= getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+                settings.edit().remove("user").commit();
+                switch (state){
+                    case 1: // username or password incorrect
+                        showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                        break;
+                    case 2: // server not found
+                        showMessage(getString(R.string.error_connection_failed), getString(R.string.error_server_not_found));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 

@@ -3,6 +3,11 @@
 
     <!-- Default names application -->
 
+    <!-- Banner info -->
+    <!-- real <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string>-->
+    <!-- to make tests -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
     <!-- titles activities -->
     <string name="title_activity_main">Main menu</string>
     <string name="title_activity_request">My requests</string>
@@ -17,6 +22,7 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_authentication">The username or password are incorrect</string>
     <string name="error_connection_failed">Failed connection</string>
+    <string name="error_server_not_found">Server not found</string>
     <string name="msg_authentication">Authenticating...</string>
     <string name="error_field_fee">You must choose a kind of fee</string>
     <string name="error_field_payment">You must choose a kind of payment</string>
@@ -27,6 +33,8 @@
     <string name="msg_request_arrived">A new request has arrived</string>
     <string name="msg_loading">Loading...</string>
     <string name="error_field_date_disbursement">Choose a disbursement date</string>
+    <string name="msg_list_empty_title">No requests</string>
+    <string name="msg_list_empty">There are not requests to be shown</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -36,7 +44,9 @@
     <string name="all_requests">Requests</string>
     <string name="all_requests_desc">Sent requests</string>
 
-    <!-- names for requestActivity -->
+    <!-- names for requestActivity some similar to createRequestActivity -->
+    <string name="date_info">Date</string>
+    <string name="amount_loan_info">Value of the loan</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Applicant</string>

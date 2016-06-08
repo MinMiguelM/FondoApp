@@ -1,9 +1,15 @@
 package tk.fondomon.activities;
 
+import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,6 +22,12 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -45,6 +57,10 @@ public class MainActivity extends AppCompatActivity
 
     private SmfMember user=null;
 
+    private InterstitialAd mInterstitialAd;
+    private int activityToSend;
+    private String inception;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,15 +78,45 @@ public class MainActivity extends AppCompatActivity
             // Click event for single list row
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(MainActivity.this,RequestActivity.class);
-                    intent.putExtra("user",user);
-                    intent.putExtra("inception",actionDataCollection.get(position).get(KEY_ID));
-                    startActivity(intent);
+                    activityToSend = 1;
+                    inception = actionDataCollection.get(position).get(KEY_ID);
+                    requestNewInterstitial();
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded(){
+                if(mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
+            }
+
+            @Override
+            public void onAdClosed() {
+                Intent intent;
+                switch (activityToSend){
+                    case 0: // create requests
+                        intent = new Intent(MainActivity.this,CreateRequestActivity.class);
+                        intent.putExtra("user",user);
+                        startActivity(intent);
+                        break;
+                    case 1: // requests
+                        intent = new Intent(MainActivity.this,RequestActivity.class);
+                        intent.putExtra("user",user);
+                        intent.putExtra("inception",inception);
+                        startActivity(intent);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,9 +124,8 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                Intent intent = new Intent(MainActivity.this,CreateRequestActivity.class);
-                intent.putExtra("user",user);
-                startActivity(intent);
+                activityToSend = 0; // create requests
+                requestNewInterstitial();
             }
         });
 
@@ -100,6 +145,19 @@ public class MainActivity extends AppCompatActivity
         } catch(Exception ex){
             ex.printStackTrace();
         }
+    }
+
+    /**
+     * Display ads, to test use emulators.
+     * To show real ads, delete addTestDevice methods.
+     */
+    private void requestNewInterstitial() {
+        AdRequest request = new AdRequest.Builder()
+                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
+                .setGender(AdRequest.GENDER_FEMALE)
+                .build();
+        mInterstitialAd.loadAd(request);
     }
 
     @Override

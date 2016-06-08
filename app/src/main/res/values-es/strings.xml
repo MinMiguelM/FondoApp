@@ -3,6 +3,11 @@
 
     <!-- Nombres cuando el idioma está en español -->
 
+    <!-- Banner info -->
+    <!-- real <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string>-->
+    <!-- to make tests -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
     <!-- titles activities -->
     <string name="title_activity_main">Menú principal</string>
     <string name="title_activity_request">Mis solicitudes</string>
@@ -17,6 +22,7 @@
     <string name="error_field_required">Este campo es requerido</string>
     <string name="error_authentication">El usuario o contraseña son incorrectos</string>
     <string name="error_connection_failed">Connexión fallida</string>
+    <string name="error_server_not_found">Servidor no disponible</string>
     <string name="msg_authentication">Autenticando...</string>
     <string name="error_field_fee">Debes seleccionar un tipo de cuota</string>
     <string name="error_field_payment">Debes seleccionar un tipo de abono</string>
@@ -27,6 +33,8 @@
     <string name="msg_request_arrived">Una nueva solicitud ha llegado</string>
     <string name="msg_loading">Cargando...</string>
     <string name="error_field_date_disbursement">Seleccione una fecha de desembolso</string>
+    <string name="msg_list_empty_title">No solicitudes</string>
+    <string name="msg_list_empty">No hay solicitudes para mostrar</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
@@ -36,7 +44,9 @@
     <string name="all_requests">Solicitudes</string>
     <string name="all_requests_desc">Solicitudes enviadas</string>
 
-    <!-- names for requestActivity -->
+    <!-- names for requestActivity some similar to createRequestActivity -->
+    <string name="date_info">Fecha</string>
+    <string name="amount_loan_info">Valor solicitado</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Solicitante</string>

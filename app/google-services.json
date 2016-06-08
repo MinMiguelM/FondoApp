@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "978718019813",
+    "firebase_url": "https://admob-app-id-3733859021.firebaseio.com",
+    "project_id": "admob-app-id-3733859021",
+    "storage_bucket": "admob-app-id-3733859021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978718019813:android:d59d5be405093a2a",
+        "android_client_info": {
+          "package_name": "tk.fondomon.activities"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978718019813-qb8ku1463ig4kekav5rdnh2aptcom8s4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0LT5vooqPkIwLeYlnGA8w8UVhImLxS6s"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
