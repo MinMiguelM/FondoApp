@@ -2,6 +2,7 @@ package tk.fondomon.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +28,7 @@ public class RequestsData extends BaseAdapter {
     static final String KEY_AMOUNT = "amount";
     static final String KEY_TIME = "time_limit";
     static final String KEY_FEE = "fee";
+    static final String KEY_STATE = "state";
 
     LayoutInflater inflater;
     List<HashMap<String,String>> requestsDataCollection;
@@ -68,6 +72,7 @@ public class RequestsData extends BaseAdapter {
             holder.date_text =(TextView)vi.findViewById(R.id.date);
             holder.time_limit_text = (TextView)vi.findViewById(R.id.time_limit);
             holder.fee_text = (TextView)vi.findViewById(R.id.fee);
+            holder.state_text = (TextView)vi.findViewById(R.id.state);
             vi.setTag(holder);
         }else{
             holder = (ViewHolder)vi.getTag();
@@ -83,6 +88,15 @@ public class RequestsData extends BaseAdapter {
                 +requestsDataCollection.get(position).get(KEY_TIME));
         holder.fee_text.setText(vi.getContext().getApplicationContext().getString(R.string.fee)+": "
                 +requestsDataCollection.get(position).get(KEY_FEE));
+        String state = requestsDataCollection.get(position).get(KEY_STATE);
+        holder.state_text.setText(vi.getContext().getApplicationContext().getString(R.string.state_info)+": "
+                +state);
+        if(state.equals("Espera")) // color naranja
+            holder.state_text.setTextColor(Color.parseColor("#DC8A2D"));
+        else if(state.equals("Terminado")) // color negro
+            holder.state_text.setTextColor(Color.BLACK);
+        else if(state.equals("Activo")) // verde
+            holder.state_text.setTextColor(Color.parseColor("#2DDC32"));
 
         return vi;
     }
@@ -93,5 +107,6 @@ public class RequestsData extends BaseAdapter {
         TextView date_text;
         TextView time_limit_text;
         TextView fee_text;
+        TextView state_text;
     }
 }

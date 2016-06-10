@@ -27,7 +27,7 @@
     <string name="error_field_fee">You must choose a kind of fee</string>
     <string name="error_field_payment">You must choose a kind of payment</string>
     <string name="msg_sending">Sending...</string>
-    <string name="msg_notify">Done transaction</string>
+    <string name="msg_notify">Transaction is done</string>
     <string name="msg_notify_title">Success</string>
     <string name="msg_request_arrived_title">New request</string>
     <string name="msg_request_arrived">A new request has arrived</string>
@@ -35,6 +35,8 @@
     <string name="error_field_date_disbursement">Choose a disbursement date</string>
     <string name="msg_list_empty_title">No requests</string>
     <string name="msg_list_empty">There are not requests to be shown</string>
+    <string name="msg_no_info_title">No information available</string>
+    <string name="msg_no_info">There is not information available, now that this requests had finished or has not started yet</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -43,10 +45,13 @@
     <string name="my_requests_desc">My shipments</string>
     <string name="all_requests">Requests</string>
     <string name="all_requests_desc">Sent requests</string>
+    <string name="my_information">My information</string>
+    <string name="my_information_desc">My information in the group</string>
 
     <!-- names for requestActivity some similar to createRequestActivity -->
     <string name="date_info">Date</string>
     <string name="amount_loan_info">Value of the loan</string>
+    <string name="state_info">State</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Applicant</string>
@@ -65,4 +70,5 @@
 
     <!-- names for nav header -->
     <string name="sign_out">Sign out</string>
+    <string name="about_it">About</string>
 </resources>

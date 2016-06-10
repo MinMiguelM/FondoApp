@@ -131,6 +131,8 @@ public class SmfMember implements Serializable {
 
 	private String yim;
 
+	private String quota;
+
 	public SmfMember() {
 	}
 
@@ -614,4 +616,11 @@ public class SmfMember implements Serializable {
 		this.yim = yim;
 	}
 
+	public String getQuota(){
+		return this.quota;
+	}
+
+	public void setQuota(String quota){
+		this.quota = quota;
+	}
 }

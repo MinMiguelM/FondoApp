@@ -72,4 +72,15 @@
         android:text="asf"
         android:textColor="#343434"
         android:textSize="15dip" />
+    <TextView
+        android:id="@+id/state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fee"
+        android:layout_alignStart="@id/name"
+        android:layout_alignLeft="@+id/name"
+        android:layout_centerHorizontal="true"
+        android:text="asf"
+        android:textStyle="bold"
+        android:textSize="15dip"/>
 </RelativeLayout>

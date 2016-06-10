@@ -35,6 +35,8 @@
     <string name="error_field_date_disbursement">Seleccione una fecha de desembolso</string>
     <string name="msg_list_empty_title">No solicitudes</string>
     <string name="msg_list_empty">No hay solicitudes para mostrar</string>
+    <string name="msg_no_info_title">No información disponible</string>
+    <string name="msg_no_info">No hay información disponible, ya que esta solicitud ya concluyó o aún no ha sido aprobada</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
@@ -43,10 +45,13 @@
     <string name="my_requests_desc">Mis envíos</string>
     <string name="all_requests">Solicitudes</string>
     <string name="all_requests_desc">Solicitudes enviadas</string>
+    <string name="my_information">Mi información</string>
+    <string name="my_information_desc">Mi información en el fondo</string>
 
     <!-- names for requestActivity some similar to createRequestActivity -->
     <string name="date_info">Fecha</string>
     <string name="amount_loan_info">Valor solicitado</string>
+    <string name="state_info">Estado</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Solicitante</string>
@@ -65,4 +70,5 @@
 
     <!-- names for nav header -->
     <string name="sign_out">Cerrar sesión</string>
+    <string name="about_it">Acerca de</string>
 </resources>

@@ -128,6 +128,7 @@ public class RequestActivity extends AppCompatActivity {
             tok.nextToken();
             map.put("fee",tok.nextToken().trim());
             map.put("id",s.getIdMsg()+"");
+            map.put("state",s.getState());
             requestsUser.add(map);
         }
     }
@@ -182,7 +183,12 @@ public class RequestActivity extends AppCompatActivity {
                 // Click event for single list row
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        System.out.println(requestsUser.get(position).toString());
+                        if(requestsUser.get(position).get("state").equals("Espera") || requestsUser.get(position).get("state").equals("Terminado")){
+                            showMessage(getString(R.string.msg_no_info_title),getString(R.string.msg_no_info));
+                        }else{
+                            System.out.println(requestsUser.get(position).toString());
+                            // send to another activity
+                        }
                     }
                 });
                 showProgress(null, false);

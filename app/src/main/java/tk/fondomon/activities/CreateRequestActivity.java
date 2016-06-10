@@ -28,13 +28,24 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import tk.fondomon.entities.SmfMember;
+import tk.fondomon.entities.SmfMessage;
+import tk.fondomon.entities.SmfTopic;
+import tk.fondomon.persistence.Queries;
+import tk.fondomon.utils.Utils;
 
 public class CreateRequestActivity extends AppCompatActivity {
 
@@ -201,7 +212,8 @@ public class CreateRequestActivity extends AppCompatActivity {
             focusView.requestFocus();
         else{
             showProgress(getString(R.string.msg_sending),true);
-            PublishRequestTask publishTask = new PublishRequestTask(user);
+            PublishRequestTask publishTask = new PublishRequestTask(user,moneyStr,timeStr,dateStr,
+                    fee,payment,inf);
             publishTask.execute();
             // Connection with the server, authentication
 
@@ -253,7 +265,7 @@ public class CreateRequestActivity extends AppCompatActivity {
         if(!show)
             progress.dismiss();
         else
-            progress = ProgressDialog.show(CreateRequestActivity.this, null, message, true);
+            progress = ProgressDialog.show(this, null, message, true);
     }
 
     /**
@@ -263,9 +275,19 @@ public class CreateRequestActivity extends AppCompatActivity {
     public class PublishRequestTask extends AsyncTask<Void, Void, Boolean> {
 
         private final SmfMember user;
+        private String moneyText, timeText, dateDisbursementText, feeText, paymentText, infAdditionalText;
 
-        PublishRequestTask(SmfMember user) {
+        private int state;
+
+        PublishRequestTask(SmfMember user, String moneyText, String timeText, String dateDisbursementText,
+                           String feeText, String paymentText, String infAdditionalText) {
             this.user = user;
+            this.moneyText = moneyText;
+            this.timeText = timeText;
+            this.dateDisbursementText = dateDisbursementText;
+            this.feeText = feeText;
+            this.paymentText = paymentText;
+            this.infAdditionalText = infAdditionalText;
         }
 
         @Override
@@ -273,13 +295,78 @@ public class CreateRequestActivity extends AppCompatActivity {
             // TODO: attempt authentication against a network service.
 
             try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                /** smfMessage
+                 * id_topic (update)
+                 * id board = 4
+                 * poster_time = timestamp
+                 * id_member
+                 * id_msg_modified (update)
+                 * subject = Solicitud crédito de real_name
+                 * poster_name = real_name
+                 * poster_email
+                 * poster_ip
+                 * smileys = 1
+                 * modified_time = 0
+                 * body
+                 * icon = xx
+                 * approved = 1
+                 */
+                SmfMessage newMessage = new SmfMessage();
+                newMessage.setIdBoard(4); newMessage.setPosterTime((int)((new Timestamp(System.currentTimeMillis()).getTime())/1000));
+                newMessage.setIdMember(user.getIdMember()); newMessage.setSubject("Solicitud de crédito de "+user.getRealName());
+                newMessage.setPosterName(user.getRealName()); newMessage.setPosterEmail(user.getEmailAddress());
+                newMessage.setPosterIp(Utils.getIPAddress(true)); newMessage.setSmileysEnabled(Byte.parseByte("1"));
+                newMessage.setModifiedTime(0); newMessage.setIcon("xx");
+                newMessage.setBody("Solicitud de crédito.\n\n[b]Nombre: [/b]" + user.getRealName() + "\n[b]Fecha: [/b]" + (day+"/"+(month+1)+"/"+year) +
+                        "\n[b]Valor a solicitar: [/b]$" + moneyText + "\n[b]Plazo: [/b]" + timeText + "\n[b]Cuota: [/b]" + feeText +
+                        "\n[b]Fecha de desembolso: [/b]" + dateDisbursementText + "\n[b]Abono en: [/b]" + paymentText +
+                        "\n[b]Información adicional: [/b]" + infAdditionalText + "\n\nYo " + user.getRealName() +
+                        ", si acepto las condiciones estipuladas por el fondo para este tipo de créditos.");
+                newMessage.setApproved(Byte.parseByte("1")); newMessage.setModifiedName(""); newMessage.setState("Espera");
+                System.out.println(newMessage.getState());
+
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+                SmfMessage msg = restTemplate.postForObject(Queries.INSERT_REQUEST, newMessage,SmfMessage.class);
+
+                /** smfTopic
+                 * is_sticky = 0
+                 * id_board = 4
+                 * id_first_msg = smfMessage
+                 * id_last_msg = smfMessage
+                 * id_member_started
+                 * id_member_updated = same up
+                 * id_poll = 0
+                 * id_previous_board = 0
+                 * id_previous_topic = 0
+                 * num_replies = 0
+                 * num_views = 0
+                 * locked = 0
+                 * unapproved_posts = 0
+                 * approved = 1
+                 */
+                SmfTopic topic = new SmfTopic();
+                topic.setIsSticky(Byte.parseByte("0")); topic.setIdBoard(4);
+                topic.setIdFirstMsg(msg.getIdMsg()); topic.setIdLastMsg(msg.getIdMsg());
+                topic.setIdMemberStarted(user.getIdMember()); topic.setIdMemberUpdated(user.getIdMember());
+                topic.setIdPoll(0); topic.setIdPreviousBoard(Short.parseShort("0")); topic.setIdPreviousTopic(0);
+                topic.setNumReplies(0); topic.setNumViews(0); topic.setLocked(Byte.parseByte("0"));
+                topic.setUnapprovedPosts(Short.parseShort("0")); topic.setApproved(Byte.parseByte("1"));
+
+                SmfTopic topicR = restTemplate.postForObject(Queries.INSERT_TOPIC,topic,SmfTopic.class);
+
+                msg.setIdTopic(topicR.getIdTopic()); msg.setIdMsgModified(msg.getIdMsg());
+                restTemplate.postForObject(Queries.UPDATE_REQUEST,msg,SmfMessage.class);
+            } catch (ResourceAccessException e) {
+                state = 2;
+                e.printStackTrace();
+                return false;
+            } catch (Exception e){
+                e.printStackTrace();
                 return false;
             }
-
-            // TODO: register the new account here.
             return true;
         }
 
@@ -288,13 +375,18 @@ public class CreateRequestActivity extends AppCompatActivity {
             showProgress(null, false);
             try {
                 if (success) {
-                    showMessage(getString(R.string.msg_notify_title), getString(R.string.msg_notify));
-                    Thread.sleep(2000);
+                    Toast.makeText(getApplicationContext(),getString(R.string.msg_notify) , Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(CreateRequestActivity.this, MainActivity.class);
                     intent.putExtra("user",user);
                     startActivity(intent);
                 } else {
-                    showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                    switch(state){
+                        case 2:
+                            showMessage(getString(R.string.error_connection_failed), getString(R.string.error_server_not_found));
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }catch (Exception e){
                 e.printStackTrace();

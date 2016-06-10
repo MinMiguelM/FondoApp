@@ -16,4 +16,6 @@ public class Queries {
     public static final String GET_REQUESTS_BY_IDMEMBER = HOST + ":" + PORT + "/requests/getByIdMember/";
     public static final String INSERT_REQUEST = HOST + ":" + PORT + "/requests/add";
     public static final String GET_ALL_REQUESTS = HOST + ":" + PORT + "/requests/getAll";
+    public static final String UPDATE_REQUEST = HOST + ":" + PORT + "/requests/update";
+    public static final String INSERT_TOPIC = HOST + ":" + PORT + "/topics/add";
 }

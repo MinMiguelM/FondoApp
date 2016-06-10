@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity
     private InterstitialAd mInterstitialAd;
     private int activityToSend;
     private String inception;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,8 +79,11 @@ public class MainActivity extends AppCompatActivity
             // Click event for single list row
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    activityToSend = 1;
                     inception = actionDataCollection.get(position).get(KEY_ID);
+                    if(inception.equals("3")) // my information
+                        activityToSend = 2;
+                    else
+                        activityToSend = 1;
                     requestNewInterstitial();
                 }
             });
@@ -93,8 +97,10 @@ public class MainActivity extends AppCompatActivity
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded(){
-                if(mInterstitialAd.isLoaded())
+                if(mInterstitialAd.isLoaded()) {
+                    showProgress(null,false);
                     mInterstitialAd.show();
+                }
             }
 
             @Override
@@ -111,6 +117,9 @@ public class MainActivity extends AppCompatActivity
                         intent.putExtra("user",user);
                         intent.putExtra("inception",inception);
                         startActivity(intent);
+                        break;
+                    case 2: // my information
+                        // launch to information activity
                         break;
                     default:
                         break;
@@ -148,6 +157,17 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * show the progress of the current task
+     */
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
+    public void showProgress(String message, boolean show){
+        if(!show)
+            progress.dismiss();
+        else
+            progress = ProgressDialog.show(this, null, message, true);
+    }
+
+    /**
      * Display ads, to test use emulators.
      * To show real ads, delete addTestDevice methods.
      */
@@ -157,6 +177,7 @@ public class MainActivity extends AppCompatActivity
                 .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
                 .setGender(AdRequest.GENDER_FEMALE)
                 .build();
+        showProgress(getString(R.string.msg_loading),true);
         mInterstitialAd.loadAd(request);
     }
 
@@ -185,9 +206,9 @@ public class MainActivity extends AppCompatActivity
             settings.edit().remove("user").commit();
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
-        } /*else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_about) {
+            // show information about the app and the fondo.
+        } /*else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 

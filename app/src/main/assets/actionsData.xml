@@ -12,4 +12,10 @@
         <desc>all_requests_desc</desc>
         <img>icon_sended_requests</img>
     </actionData>
+    <actionData>
+        <id>3</id>
+        <title>my_information</title>
+        <desc>my_information_desc</desc>
+        <img>icon_my_information</img>
+    </actionData>
 </Actions>
