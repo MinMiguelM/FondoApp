@@ -52,17 +52,11 @@
                         android:hint="@string/amount_money"
                         android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
-                <android.support.design.widget.TextInputLayout
+                <Spinner
+                    android:id="@+id/spinnerTimeLimit"
                     android:layout_width="fill_parent"
-                    android:layout_height="wrap_content">
-                    <EditText
-                        android:id="@+id/time_limit"
-                        android:layout_width="fill_parent"
-                        android:layout_height="60dp"
-                        android:hint="@string/time_limit"
-                        android:padding="5dp"
-                        android:singleLine="true"/>
-                </android.support.design.widget.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"/>
                 <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"

@@ -4,7 +4,8 @@
     <!-- Default names application -->
 
     <!-- Banner info -->
-    <!-- real <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string>-->
+    <!-- real
+    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string> -->
     <!-- to make tests -->
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
 
@@ -12,6 +13,8 @@
     <string name="title_activity_main">Main menu</string>
     <string name="title_activity_request">My requests</string>
     <string name="title_activity_create_request">Create request</string>
+    <string name="title_activity_info">My information</string>
+    <string name="title_activity_about">About</string>
 
     <!-- names for loginActivity -->
     <string name="username">Username</string>
@@ -35,8 +38,11 @@
     <string name="error_field_date_disbursement">Choose a disbursement date</string>
     <string name="msg_list_empty_title">No requests</string>
     <string name="msg_list_empty">There are not requests to be shown</string>
-    <string name="msg_no_info_title">No information available</string>
-    <string name="msg_no_info">There is not information available, now that this requests had finished or has not started yet</string>
+    <string name="msg_credit_title">Information</string>
+    <string name="msg_cancelled_info">This credit had finished</string>
+    <string name="msg_waited_info">This credit has not approved</string>
+    <string name="msg_approved_info">This credit is valid</string>
+    <string name="update_info_credit">Update state credit</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -52,6 +58,8 @@
     <string name="date_info">Date</string>
     <string name="amount_loan_info">Value of the loan</string>
     <string name="state_info">State</string>
+    <string name="start_credit">Start</string>
+    <string name="finish_credit">Finish</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Applicant</string>
@@ -67,8 +75,20 @@
     <string name="payment">Payment</string>
     <string name="payment_cash">Cash</string>
     <string name="payment_account">Account</string>
+    <string name="month_label">Months</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Sign out</string>
     <string name="about_it">About</string>
+
+    <!-- names for infoActivity -->
+    <string name="info_fondo">Personal information</string>
+    <string name="info_economic">Economic information</string>
+    <string name="contributions">Contributions</string>
+    <string name="quota_info">Quota</string>
+    <string name="balance_info">Balance</string>
+    <string name="amount_credits_info">Amount of credits</string>
+    <string name="value_credits">Value of credits</string>
+    <string name="name_info">Name</string>
+    <string name="email_info">Email</string>
 </resources>

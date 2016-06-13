@@ -51,12 +51,13 @@ public class CreateRequestActivity extends AppCompatActivity {
 
     private String fee;
     private String payment;
+    private String timeLimit;
 
     private EditText money;
-    private EditText time;
     private EditText infAdditional;
     private Spinner spinnerFee;
     private Spinner spinnerPayment;
+    private Spinner spinnerTimeLimit;
     private ProgressDialog progress;
     private SmfMember user;
     private TextView dateDisbursement;
@@ -71,9 +72,30 @@ public class CreateRequestActivity extends AppCompatActivity {
         user = (SmfMember) getIntent().getExtras().getSerializable("user");
 
         money = (EditText)findViewById(R.id.money_requested);
-        time = (EditText)findViewById(R.id.time_limit);
         infAdditional = (EditText)findViewById(R.id.inf_additional);
         dateDisbursement = (TextView)findViewById(R.id.disbursement);
+        // ------------------------------------------------------------------
+        spinnerTimeLimit = (Spinner)findViewById(R.id.spinnerTimeLimit);
+        spinnerTimeLimit.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                timeLimit = parent.getItemAtPosition(position).toString();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        List<String> categoriesTime = new ArrayList<>();
+        for (int i = 1;i<=24;i++)
+            categoriesTime.add(i+" "+getString(R.string.month_label));
+
+        ArrayAdapter<String> dataAdapterTime = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categoriesTime);
+
+        dataAdapterTime.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spinnerTimeLimit.setAdapter(dataAdapterTime);
         // ------------------------------------------------------------------
         spinnerFee = (Spinner)findViewById(R.id.spinnerFee);
         spinnerFee.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -187,7 +209,7 @@ public class CreateRequestActivity extends AppCompatActivity {
 
     public void sendRequest(){
         String moneyStr = money.getText().toString();
-        String timeStr = time.getText().toString();
+        String timeStr = timeLimit;
         String dateStr = dateDisbursement.getText().toString();
         String inf = infAdditional.getText().toString();
 
@@ -197,10 +219,6 @@ public class CreateRequestActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(moneyStr)){
             money.setError(getString(R.string.error_field_required));
             focusView = money;
-            cancel = true;
-        }else if(TextUtils.isEmpty(timeStr)){
-            time.setError(getString(R.string.error_field_required));
-            focusView = time;
             cancel = true;
         }else if(dateStr.equals(getString(R.string.date_disbursement))){
             showMessage("Error",getString(R.string.error_field_date_disbursement));

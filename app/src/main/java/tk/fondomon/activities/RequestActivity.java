@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -16,9 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.springframework.http.converter.FormHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
@@ -102,6 +106,28 @@ public class RequestActivity extends AppCompatActivity {
         alert.show();
     }
 
+    public void showMessageOptions(String title, String detail, final SmfMessage mes){
+        final Activity act = this;
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(title);
+        alert.setMessage(detail);
+        alert.setPositiveButton(getString(R.string.start_credit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showProgress(getString(R.string.msg_loading),true);
+                new UpdateTask(mes,act).execute("Activo");
+            }
+        });
+        alert.setNegativeButton(getString(R.string.finish_credit), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showProgress(getString(R.string.msg_loading),true);
+                new UpdateTask(mes,act).execute("Cancelado");
+            }
+        });
+        alert.show();
+    }
+
     /**
      * fill the requests into a list of map
      */
@@ -131,6 +157,14 @@ public class RequestActivity extends AppCompatActivity {
             map.put("state",s.getState());
             requestsUser.add(map);
         }
+    }
+
+    public SmfMessage findRequest(int id){
+        for(SmfMessage s:requests){
+            if(s.getIdMsg() == id)
+                return s;
+        }
+        return null;
     }
 
     /**
@@ -183,11 +217,18 @@ public class RequestActivity extends AppCompatActivity {
                 // Click event for single list row
                 list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if(requestsUser.get(position).get("state").equals("Espera") || requestsUser.get(position).get("state").equals("Terminado")){
-                            showMessage(getString(R.string.msg_no_info_title),getString(R.string.msg_no_info));
-                        }else{
-                            System.out.println(requestsUser.get(position).toString());
-                            // send to another activity
+                        if(inception.equals("1")) {
+                            if (requestsUser.get(position).get("state").equals("Cancelado")) {
+                                showMessage(getString(R.string.msg_credit_title), getString(R.string.msg_cancelled_info));
+                            } else if(requestsUser.get(position).get("state").equals("Espera")){
+                                showMessage(getString(R.string.msg_credit_title), getString(R.string.msg_waited_info));
+                            } else if(requestsUser.get(position).get("state").equals("Activo"))
+                                showMessage(getString(R.string.msg_credit_title), getString(R.string.msg_approved_info));
+                        }else if(inception.equals("2")){
+                            if (requestsUser.get(position).get("state").equals("Espera") || requestsUser.get(position).get("state").equals("Activo")) {
+                                showMessageOptions(getString(R.string.msg_credit_title),getString(R.string.update_info_credit),
+                                        findRequest(Integer.parseInt(requestsUser.get(position).get("id"))));
+                            }
                         }
                     }
                 });
@@ -198,6 +239,67 @@ public class RequestActivity extends AppCompatActivity {
                     case 1:
                         showMessage(getString(R.string.msg_list_empty_title), getString(R.string.msg_list_empty));
                         break;
+                    case 2:
+                        showMessage(getString(R.string.error_connection_failed), getString(R.string.error_server_not_found));
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            showProgress(null, false);
+        }
+    }
+
+    /**
+     *
+     */
+    public class UpdateTask extends AsyncTask<String, Void, Boolean> {
+
+        private SmfMessage mes;
+        private int state;
+        private Activity act;
+
+        public UpdateTask(SmfMessage mes, Activity act){
+            this.mes = mes;
+            this.act = act;
+        }
+
+        @Override
+        protected Boolean doInBackground(String... params) {
+            try {
+                mes.setState(params[0]);
+
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
+                restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
+                restTemplate.postForObject(Queries.UPDATE_REQUEST,mes,SmfMessage.class);
+            } catch (ResourceAccessException ex) {
+                ex.printStackTrace();
+                state = 2;
+                return false;
+            }catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if (success) {
+                showProgress(null, false);
+                Toast.makeText(getApplicationContext(),getString(R.string.msg_notify) , Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(act, MainActivity.class);
+                intent.putExtra("user",user);
+                startActivity(intent);
+            } else {
+                showProgress(null, false);
+                switch (state){
                     case 2:
                         showMessage(getString(R.string.error_connection_failed), getString(R.string.error_server_not_found));
                         break;

@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Actions>
     <actionData>
+        <id>3</id>
+        <title>my_information</title>
+        <desc>my_information_desc</desc>
+        <img>icon_my_information</img>
+    </actionData>
+    <actionData>
         <id>1</id>
         <title>my_requests</title>
         <desc>my_requests_desc</desc>
@@ -11,11 +17,5 @@
         <title>all_requests</title>
         <desc>all_requests_desc</desc>
         <img>icon_sended_requests</img>
-    </actionData>
-    <actionData>
-        <id>3</id>
-        <title>my_information</title>
-        <desc>my_information_desc</desc>
-        <img>icon_my_information</img>
     </actionData>
 </Actions>

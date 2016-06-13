@@ -1,11 +1,13 @@
 package tk.fondomon.activities;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,6 +36,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -71,40 +74,20 @@ public class MainActivity extends AppCompatActivity
 
         user = (SmfMember) getIntent().getExtras().getSerializable("user");
 
-        try {
-            listActions();
-            BinderData bindingData = new BinderData(this,actionDataCollection);
-            list = (ListView) findViewById(R.id.list);
-            list.setAdapter(bindingData);
-            // Click event for single list row
-            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    inception = actionDataCollection.get(position).get(KEY_ID);
-                    if(inception.equals("3")) // my information
-                        activityToSend = 2;
-                    else
-                        activityToSend = 1;
-                    requestNewInterstitial();
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         mInterstitialAd = new InterstitialAd(this);
         mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
-
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded(){
-                if(mInterstitialAd.isLoaded()) {
-                    showProgress(null,false);
+                if(progress != null && progress.isShowing()) {
+                    showProgress(null, false);
                     mInterstitialAd.show();
                 }
             }
 
             @Override
             public void onAdClosed() {
+                new AdMobTask().execute();
                 Intent intent;
                 switch (activityToSend){
                     case 0: // create requests
@@ -119,13 +102,41 @@ public class MainActivity extends AppCompatActivity
                         startActivity(intent);
                         break;
                     case 2: // my information
-                        // launch to information activity
+                        intent = new Intent(MainActivity.this,InfoActivity.class);
+                        intent.putExtra("user",user);
+                        startActivity(intent);
                         break;
                     default:
                         break;
                 }
             }
         });
+
+        //requestNewInterstitial();
+        new AdMobTask().execute();
+
+        try {
+            listActions();
+            BinderData bindingData = new BinderData(this,actionDataCollection);
+            list = (ListView) findViewById(R.id.list);
+            list.setAdapter(bindingData);
+            // Click event for single list row
+            list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    inception = actionDataCollection.get(position).get(KEY_ID);
+                    if(inception.equals("3")) // my information
+                        activityToSend = 2;
+                    else
+                        activityToSend = 1;
+                    if(mInterstitialAd.isLoading())
+                        showProgress(getString(R.string.msg_loading),true);
+                    else if(mInterstitialAd.isLoaded())
+                        mInterstitialAd.show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -134,7 +145,10 @@ public class MainActivity extends AppCompatActivity
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 activityToSend = 0; // create requests
-                requestNewInterstitial();
+                if(mInterstitialAd.isLoading())
+                    showProgress(getString(R.string.msg_loading),true);
+                else if(mInterstitialAd.isLoaded())
+                    mInterstitialAd.show();
             }
         });
 
@@ -175,9 +189,8 @@ public class MainActivity extends AppCompatActivity
         AdRequest request = new AdRequest.Builder()
                 .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
                 .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-                .setGender(AdRequest.GENDER_FEMALE)
                 .build();
-        showProgress(getString(R.string.msg_loading),true);
+        //showProgress(getString(R.string.msg_loading),true);
         mInterstitialAd.loadAd(request);
     }
 
@@ -201,13 +214,15 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        item.setChecked(false);
         if (id == R.id.nav_sign_out) {
             SharedPreferences settings= getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
             settings.edit().remove("user").commit();
             Intent intent = new Intent(MainActivity.this,LoginActivity.class);
             startActivity(intent);
         } else if (id == R.id.nav_about) {
-            // show information about the app and the fondo.
+            Intent intent = new Intent(MainActivity.this,AboutActivity.class);
+            startActivity(intent);
         } /*else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -272,6 +287,35 @@ public class MainActivity extends AppCompatActivity
                     actionDataCollection.add(map);
                 else if (!id.equals("2"))
                     actionDataCollection.add(map);
+            }
+        }
+    }
+
+    public class AdMobTask extends AsyncTask<Object, Void, Boolean> {
+
+        /**
+         * Display ads, to test use emulators.
+         * To show real ads, delete addTestDevice methods.
+         */
+        private void requestNewInterstitial() {
+            AdRequest request = new AdRequest.Builder()
+                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                    //.addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
+                    .addTestDevice("AF79F6CAA42A0FEDB02F59215897D735")
+                    .build();
+            //showProgress("Loading...",true);
+            mInterstitialAd.loadAd(request);
+        }
+
+        @Override
+        public Boolean doInBackground(Object... params){
+            return true;
+        }
+
+        @Override
+        protected void onPostExecute(final Boolean success) {
+            if(success) {
+                requestNewInterstitial();
             }
         }
     }

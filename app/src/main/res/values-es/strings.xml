@@ -4,14 +4,17 @@
     <!-- Nombres cuando el idioma está en español -->
 
     <!-- Banner info -->
-    <!-- real <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string>-->
+    <!-- real
+    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string> -->
     <!-- to make tests -->
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string> -->
 
     <!-- titles activities -->
     <string name="title_activity_main">Menú principal</string>
     <string name="title_activity_request">Mis solicitudes</string>
     <string name="title_activity_create_request">Crear solicitud</string>
+    <string name="title_activity_info">Mi información</string>
+    <string name="title_activity_about">Acerca de</string>
 
     <!-- names for loginActivity -->
     <string name="username">Usuario</string>
@@ -35,8 +38,11 @@
     <string name="error_field_date_disbursement">Seleccione una fecha de desembolso</string>
     <string name="msg_list_empty_title">No solicitudes</string>
     <string name="msg_list_empty">No hay solicitudes para mostrar</string>
-    <string name="msg_no_info_title">No información disponible</string>
-    <string name="msg_no_info">No hay información disponible, ya que esta solicitud ya concluyó o aún no ha sido aprobada</string>
+    <string name="msg_credit_title">Información</string>
+    <string name="msg_cancelled_info">Este crédito ya fue cancelado</string>
+    <string name="msg_waited_info">Este crédito no ha sido aprobado</string>
+    <string name="msg_approved_info">Este crédito está actualmente vigente</string>
+    <string name="update_info_credit">Actualizar estado del crédito</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
@@ -52,6 +58,8 @@
     <string name="date_info">Fecha</string>
     <string name="amount_loan_info">Valor solicitado</string>
     <string name="state_info">Estado</string>
+    <string name="start_credit">Iniciar</string>
+    <string name="finish_credit">Finalizar</string>
 
     <!-- names for createRequestActivity -->
     <string name="real_name">Solicitante</string>
@@ -67,8 +75,20 @@
     <string name="payment">Abono</string>
     <string name="payment_cash">Efectivo</string>
     <string name="payment_account">Cuenta</string>
+    <string name="month_label">Meses</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Cerrar sesión</string>
     <string name="about_it">Acerca de</string>
+
+    <!-- names for infoActivity -->
+    <string name="info_fondo">Información personal</string>
+    <string name="info_economic">Información económica</string>
+    <string name="contributions">Aportes</string>
+    <string name="quota_info">Cupo</string>
+    <string name="balance_info">Saldo</string>
+    <string name="amount_credits_info">Créditos activos</string>
+    <string name="value_credits">Valor en créditos</string>
+    <string name="name_info">Nombre</string>
+    <string name="email_info">Email</string>
 </resources>

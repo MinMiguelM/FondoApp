@@ -205,13 +205,13 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(null, false);
-
             if (success) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                 intent.putExtra("user",user);
                 startActivity(intent);
+                showProgress(null, false);
             } else {
+                showProgress(null, false);
                 SharedPreferences settings= getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
                 settings.edit().remove("user").commit();
                 switch (state){
