@@ -3,10 +3,18 @@
 
     <!-- Default names application -->
 
+    <!-- Banner info -->
+    <!-- real
+    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string> -->
+    <!-- to make tests -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string>
+
     <!-- titles activities -->
     <string name="title_activity_main">Main menu</string>
     <string name="title_activity_request">My requests</string>
     <string name="title_activity_create_request">Create request</string>
+    <string name="title_activity_info">My information</string>
+    <string name="title_activity_about">About</string>
 
     <!-- names for loginActivity -->
     <string name="username">Username</string>
@@ -17,14 +25,24 @@
     <string name="error_field_required">This field is required</string>
     <string name="error_authentication">The username or password are incorrect</string>
     <string name="error_connection_failed">Failed connection</string>
+    <string name="error_server_not_found">Server not found</string>
     <string name="msg_authentication">Authenticating...</string>
     <string name="error_field_fee">You must choose a kind of fee</string>
     <string name="error_field_payment">You must choose a kind of payment</string>
     <string name="msg_sending">Sending...</string>
-    <string name="msg_notify">Done transaction</string>
+    <string name="msg_notify">Transaction is done</string>
     <string name="msg_notify_title">Success</string>
     <string name="msg_request_arrived_title">New request</string>
     <string name="msg_request_arrived">A new request has arrived</string>
+    <string name="msg_loading">Loading...</string>
+    <string name="error_field_date_disbursement">Choose a disbursement date</string>
+    <string name="msg_list_empty_title">No requests</string>
+    <string name="msg_list_empty">There are not requests to be shown</string>
+    <string name="msg_credit_title">Information</string>
+    <string name="msg_cancelled_info">This credit had finished</string>
+    <string name="msg_waited_info">This credit has not approved</string>
+    <string name="msg_approved_info">This credit is valid</string>
+    <string name="update_info_credit">Update state credit</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -33,14 +51,22 @@
     <string name="my_requests_desc">My shipments</string>
     <string name="all_requests">Requests</string>
     <string name="all_requests_desc">Sent requests</string>
+    <string name="my_information">My information</string>
+    <string name="my_information_desc">My information in the group</string>
 
-    <!-- names for requestActivity -->
+    <!-- names for requestActivity some similar to createRequestActivity -->
+    <string name="date_info">Date</string>
+    <string name="amount_loan_info">Value of the loan</string>
+    <string name="state_info">State</string>
+    <string name="start_credit">Start</string>
+    <string name="finish_credit">Finish</string>
 
     <!-- names for createRequestActivity -->
-    <string name="complete_name">Complete name</string>
+    <string name="real_name">Applicant</string>
     <string name="amount_money">Value of the loan</string>
     <string name="time_limit">Time limit</string>
     <string name="date_disbursement">Disbursement date</string>
+    <string name="set_date">Set date</string>
     <string name="info_additional">Put additional information. Max 180 characters</string>
     <string name="send">Send</string>
     <string name="fee">Fee</string>
@@ -49,7 +75,20 @@
     <string name="payment">Payment</string>
     <string name="payment_cash">Cash</string>
     <string name="payment_account">Account</string>
+    <string name="month_label">Months</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Sign out</string>
+    <string name="about_it">About</string>
+
+    <!-- names for infoActivity -->
+    <string name="info_fondo">Personal information</string>
+    <string name="info_economic">Economic information</string>
+    <string name="contributions">Contributions</string>
+    <string name="quota_info">Quota</string>
+    <string name="balance_info">Balance</string>
+    <string name="amount_credits_info">Amount of credits</string>
+    <string name="value_credits">Value of credits</string>
+    <string name="name_info">Name</string>
+    <string name="email_info">Email</string>
 </resources>

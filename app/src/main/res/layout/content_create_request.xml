@@ -35,27 +35,34 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-                <EditText
-                    android:id="@+id/completeName"
+                <TextView
+                    android:id="@+id/real_name"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/complete_name"
-                    android:padding="5dp"
-                    android:singleLine="true"/>
-                <EditText
-                    android:id="@+id/money_requested"
+                    android:textStyle="bold"
+                    android:textSize="17dp"/>
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/money_requested"
+                        android:layout_width="fill_parent"
+                        android:layout_height="60dp"
+                        android:padding="5dp"
+                        android:hint="@string/amount_money"
+                        android:inputType="number"/>
+                </android.support.design.widget.TextInputLayout>
+                <Spinner
+                    android:id="@+id/spinnerTimeLimit"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:hint="@string/amount_money"
-                    android:inputType="number"/>
-                <EditText
-                    android:id="@+id/time_limit"
+                    android:spinnerMode="dropdown"/>
+                <TextView
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/time_limit"
-                    android:padding="5dp"
-                    android:singleLine="true"/>
+                    android:text="@string/fee"
+                    android:textStyle="bold"
+                    android:textSize="17dp"/>
                 <Spinner
                     android:id="@+id/spinnerFee"
                     android:layout_width="fill_parent"
@@ -63,13 +70,29 @@
                     android:spinnerMode="dropdown"
                     android:prompt="@string/fee">
                 </Spinner>
-                <EditText
-                    android:id="@+id/disbursement"
+                <LinearLayout
                     android:layout_width="fill_parent"
-                    android:hint="@string/date_disbursement"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
-                    android:inputType="date"/>
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/disbursement"
+                        android:layout_width="140dp"
+                        android:text="@string/date_disbursement"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:textSize="15dp"/>
+                    <Button
+                        android:id="@+id/date"
+                        android:text="@string/set_date"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/payment"
+                    android:textStyle="bold"
+                    android:textSize="17dp"/>
                 <Spinner
                     android:id="@+id/spinnerPayment"
                     android:layout_width="fill_parent"
@@ -80,7 +103,7 @@
                 <EditText
                     android:id="@+id/inf_additional"
                     android:layout_width="fill_parent"
-                    android:layout_height="88dp"
+                    android:layout_height="105dp"
                     android:ems="10"
                     android:hint="@string/info_additional"
                     android:imeOptions="actionDone"

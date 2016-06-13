@@ -3,10 +3,18 @@
 
     <!-- Nombres cuando el idioma está en español -->
 
+    <!-- Banner info -->
+    <!-- real
+    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string> -->
+    <!-- to make tests -->
+    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string> -->
+
     <!-- titles activities -->
     <string name="title_activity_main">Menú principal</string>
     <string name="title_activity_request">Mis solicitudes</string>
     <string name="title_activity_create_request">Crear solicitud</string>
+    <string name="title_activity_info">Mi información</string>
+    <string name="title_activity_about">Acerca de</string>
 
     <!-- names for loginActivity -->
     <string name="username">Usuario</string>
@@ -17,6 +25,7 @@
     <string name="error_field_required">Este campo es requerido</string>
     <string name="error_authentication">El usuario o contraseña son incorrectos</string>
     <string name="error_connection_failed">Connexión fallida</string>
+    <string name="error_server_not_found">Servidor no disponible</string>
     <string name="msg_authentication">Autenticando...</string>
     <string name="error_field_fee">Debes seleccionar un tipo de cuota</string>
     <string name="error_field_payment">Debes seleccionar un tipo de abono</string>
@@ -25,6 +34,15 @@
     <string name="msg_notify_title">Éxito</string>
     <string name="msg_request_arrived_title">Nueva solicitud</string>
     <string name="msg_request_arrived">Una nueva solicitud ha llegado</string>
+    <string name="msg_loading">Cargando...</string>
+    <string name="error_field_date_disbursement">Seleccione una fecha de desembolso</string>
+    <string name="msg_list_empty_title">No solicitudes</string>
+    <string name="msg_list_empty">No hay solicitudes para mostrar</string>
+    <string name="msg_credit_title">Información</string>
+    <string name="msg_cancelled_info">Este crédito ya fue cancelado</string>
+    <string name="msg_waited_info">Este crédito no ha sido aprobado</string>
+    <string name="msg_approved_info">Este crédito está actualmente vigente</string>
+    <string name="update_info_credit">Actualizar estado del crédito</string>
 
     <!-- names for mainActivity -->
     <string name="navigation_drawer_open">Abrir barra lateral</string>
@@ -33,14 +51,22 @@
     <string name="my_requests_desc">Mis envíos</string>
     <string name="all_requests">Solicitudes</string>
     <string name="all_requests_desc">Solicitudes enviadas</string>
+    <string name="my_information">Mi información</string>
+    <string name="my_information_desc">Mi información en el fondo</string>
 
-    <!-- names for requestActivity -->
+    <!-- names for requestActivity some similar to createRequestActivity -->
+    <string name="date_info">Fecha</string>
+    <string name="amount_loan_info">Valor solicitado</string>
+    <string name="state_info">Estado</string>
+    <string name="start_credit">Iniciar</string>
+    <string name="finish_credit">Finalizar</string>
 
     <!-- names for createRequestActivity -->
-    <string name="complete_name">Nombre completo</string>
+    <string name="real_name">Solicitante</string>
     <string name="amount_money">Valor a solicitar</string>
     <string name="time_limit">Plazo</string>
     <string name="date_disbursement">Fecha de desembolso</string>
+    <string name="set_date">Cambiar fecha</string>
     <string name="info_additional">Información adicional. Máx 180 caracteres</string>
     <string name="send">Enviar</string>
     <string name="fee">Cuota</string>
@@ -49,7 +75,20 @@
     <string name="payment">Abono</string>
     <string name="payment_cash">Efectivo</string>
     <string name="payment_account">Cuenta</string>
+    <string name="month_label">Meses</string>
 
     <!-- names for nav header -->
     <string name="sign_out">Cerrar sesión</string>
+    <string name="about_it">Acerca de</string>
+
+    <!-- names for infoActivity -->
+    <string name="info_fondo">Información personal</string>
+    <string name="info_economic">Información económica</string>
+    <string name="contributions">Aportes</string>
+    <string name="quota_info">Cupo</string>
+    <string name="balance_info">Saldo</string>
+    <string name="amount_credits_info">Créditos activos</string>
+    <string name="value_credits">Valor en créditos</string>
+    <string name="name_info">Nombre</string>
+    <string name="email_info">Email</string>
 </resources>

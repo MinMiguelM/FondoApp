@@ -131,6 +131,16 @@ public class SmfMember implements Serializable {
 
 	private String yim;
 
+	private String quota;
+
+	private String balance;
+
+	private String contributions;
+
+	private String amountCredits;
+
+	private String valueCredits;
+
 	public SmfMember() {
 	}
 
@@ -614,4 +624,67 @@ public class SmfMember implements Serializable {
 		this.yim = yim;
 	}
 
+	public String getQuota(){
+		return this.quota;
+	}
+
+	public void setQuota(String quota){
+		this.quota = quota;
+	}
+
+	/**
+	 * @return the balance
+	 */
+	public String getBalance() {
+		return balance;
+	}
+
+	/**
+	 * @param balance the balance to set
+	 */
+	public void setBalance(String balance) {
+		this.balance = balance;
+	}
+
+	/**
+	 * @return the contributions
+	 */
+	public String getContributions() {
+		return contributions;
+	}
+
+	/**
+	 * @param contributions the contributions to set
+	 */
+	public void setContributions(String contributions) {
+		this.contributions = contributions;
+	}
+
+	/**
+	 * @return the amountCredits
+	 */
+	public String getAmountCredits() {
+		return amountCredits;
+	}
+
+	/**
+	 * @param amountCredits the amountCredits to set
+	 */
+	public void setAmountCredits(String amountCredits) {
+		this.amountCredits = amountCredits;
+	}
+
+	/**
+	 * @return the valueCredits
+	 */
+	public String getValueCredits() {
+		return valueCredits;
+	}
+
+	/**
+	 * @param valueCredits the valueCredits to set
+	 */
+	public void setValueCredits(String valueCredits) {
+		this.valueCredits = valueCredits;
+	}
 }

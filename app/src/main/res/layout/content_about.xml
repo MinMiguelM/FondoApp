@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:background="@color/colorPrimary"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="tk.fondomon.activities.AboutActivity"
+    tools:showIn="@layout/activity_about">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+            <TextView
+                android:text="\nEn el año 2006, en una de las tantas reuniones de cumpleaños que celebra la Familia Montañez Herrera, se propusieron un objetivo en común “Viajar a la Costa”, sin embargo, por lo costoso del proyecto, se decide crear un fondo en el cual mensualmente se daba un aporte por cada uno de los integrantes de la familia, para poder llevar a cabo tan anhelado proyecto."
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:text="\n\n\n\nAplicación del Fondo, desarrollado por\nMiguel Montañez"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_gravity="right"
+                android:textAlignment="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:text="\nGitHub: MinMiguelM"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_gravity="right"
+                android:textAlignment="center"
+                android:textColor="@color/white"/>
+            <TextView
+                android:text="\n\n\n\n2016"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:layout_gravity="right"
+                android:textAlignment="center"
+                android:textColor="@color/white"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>

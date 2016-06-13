@@ -3,7 +3,9 @@ package tk.fondomon.activities;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,11 +15,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
+
+import org.springframework.http.HttpMessage;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.ResourceAccessException;
+import org.springframework.web.client.RestTemplate;
+
+import java.math.BigInteger;
+import java.net.ConnectException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.ExecutionException;
+
+import tk.fondomon.entities.SmfMember;
+import tk.fondomon.persistence.Queries;
+
 public class LoginActivity extends AppCompatActivity {
 
     private Button login_button;
     private EditText mPasswordView;
     private EditText mUsernameView;
+
+    private SmfMember user=null;
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +57,40 @@ public class LoginActivity extends AppCompatActivity {
                 loginAction();
             }
         });
+    }
+
+    /**
+     * Check if there is an user log in, if it is, launch the main.
+     */
+    @Override
+    public void onStart(){
+        super.onStart();
+        Gson gson = new Gson();
+        SharedPreferences settings;
+        settings = getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+        String json = settings.getString("user", null);
+        user = gson.fromJson(json,SmfMember.class);
+        if(user!=null){
+            showProgress(getString(R.string.msg_loading),true);
+            UserLoginTask task = new UserLoginTask(user.getMemberName(),user.getPasswd());
+            try {
+                task.execute().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * Convert a byte array to hex
+     */
+    public String byteArrayToHex(byte[] a) {
+        StringBuilder sb = new StringBuilder(a.length * 2);
+        for(byte b: a)
+            sb.append(String.format("%02x", b & 0xff));
+        return sb.toString();
     }
 
     /**
@@ -63,9 +120,17 @@ public class LoginActivity extends AppCompatActivity {
             focusView.requestFocus();
         else{
             showProgress(getString(R.string.msg_authentication),true);
-            UserLoginTask loginTask = new UserLoginTask(username,password);
-            loginTask.execute();
-            // Connection with the server, authentication
+            MessageDigest pass = null;
+            try {
+                pass = MessageDigest.getInstance("SHA-1");
+                pass.reset();
+                pass.update((username.toLowerCase().trim() + password).getBytes("UTF-8"));
+                String sha1Pass = byteArrayToHex(pass.digest());
+                UserLoginTask loginTask = new UserLoginTask(username,sha1Pass);
+                loginTask.execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -84,19 +149,21 @@ public class LoginActivity extends AppCompatActivity {
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     public void showProgress(String message, boolean show){
-        ProgressDialog progress = ProgressDialog.show(LoginActivity.this, null, message, true);
         if(!show)
             progress.dismiss();
+        else
+            progress = ProgressDialog.show(this, null, message, true);
     }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
+    public class UserLoginTask extends AsyncTask<String, Void, Boolean> {
 
         private final String mUsername;
         private final String mPassword;
+        private int state;
 
         UserLoginTask(String username, String password) {
             mUsername = username;
@@ -104,29 +171,59 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
+        protected Boolean doInBackground(String... params) {
             try {
                 // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
+                //Thread.sleep(2000);
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + mUsername, SmfMember.class, "Android");
+
+                if (user == null) {
+                    state = 1;
+                    return false;
+                }
+                if (mPassword.equals(user.getPasswd())) {
+                    Gson gson = new Gson();
+                    SharedPreferences preferencesUser = getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferencesUser.edit();
+                    editor.putString("user", gson.toJson(user));
+                    editor.commit();
+                    return true;
+                }
+            } catch (ResourceAccessException ex){
+                ex.printStackTrace();
+                state = 2;
+                return false;
+            } catch (Exception e) {
+                e.printStackTrace();
                 return false;
             }
-
-            // TODO: register the new account here.
-            return true;
+            state = 1;
+            return false;
         }
 
         @Override
         protected void onPostExecute(final Boolean success) {
-            showProgress(null, false);
-
             if (success) {
                 Intent intent = new Intent(LoginActivity.this,MainActivity.class);
+                intent.putExtra("user",user);
                 startActivity(intent);
+                showProgress(null, false);
             } else {
-                showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                showProgress(null, false);
+                SharedPreferences settings= getSharedPreferences("PreferencesUser", Context.MODE_PRIVATE);
+                settings.edit().remove("user").commit();
+                switch (state){
+                    case 1: // username or password incorrect
+                        showMessage(getString(R.string.error_connection_failed), getString(R.string.error_authentication));
+                        break;
+                    case 2: // server not found
+                        showMessage(getString(R.string.error_connection_failed), getString(R.string.error_server_not_found));
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
