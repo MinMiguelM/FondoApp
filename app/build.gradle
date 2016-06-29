@@ -36,5 +36,6 @@ dependencies {
     compile 'org.springframework.android:spring-android-rest-template:1.0.1.RELEASE'
     compile 'com.google.code.gson:gson:2.5'
     compile 'com.google.firebase:firebase-ads:9.0.1'
+    compile group: 'commons-codec', name: 'commons-codec', version: '1.10'
 }
 apply plugin: 'com.google.gms.google-services'

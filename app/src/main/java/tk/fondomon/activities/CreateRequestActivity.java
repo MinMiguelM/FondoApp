@@ -28,6 +28,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -347,7 +352,20 @@ public class CreateRequestActivity extends AppCompatActivity {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                 restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-                SmfMessage msg = restTemplate.postForObject(Queries.INSERT_REQUEST, newMessage,SmfMessage.class);
+
+                String credentials = Queries.USERNAME+":"+Queries.PASSWORD;
+                byte[] credBytes = credentials.getBytes();
+                byte[] credBase64Bytes = Base64.encodeBase64(credBytes);
+                String credentials64 = new String (credBase64Bytes);
+
+                HttpHeaders header = new HttpHeaders();
+                header.add("Authorization", "Basic " + credentials64);
+
+                HttpEntity<SmfMessage> request = new HttpEntity<>(newMessage,header);
+                ResponseEntity<SmfMessage> response = restTemplate.exchange(Queries.INSERT_REQUEST,
+                        HttpMethod.POST,request, SmfMessage.class);
+                //restTemplate.postForObject(Queries.INSERT_REQUEST, newMessage,SmfMessage.class);
+                SmfMessage msg = response.getBody();
 
                 /** smfTopic
                  * is_sticky = 0
@@ -373,10 +391,18 @@ public class CreateRequestActivity extends AppCompatActivity {
                 topic.setNumReplies(0); topic.setNumViews(0); topic.setLocked(Byte.parseByte("0"));
                 topic.setUnapprovedPosts(Short.parseShort("0")); topic.setApproved(Byte.parseByte("1"));
 
-                SmfTopic topicR = restTemplate.postForObject(Queries.INSERT_TOPIC,topic,SmfTopic.class);
+                HttpEntity<SmfTopic> requestTopic = new HttpEntity<>(topic,header);
+                ResponseEntity<SmfTopic> responseTopic = restTemplate.exchange(Queries.INSERT_TOPIC,
+                        HttpMethod.POST,requestTopic, SmfTopic.class);
+
+                //restTemplate.postForObject(Queries.INSERT_TOPIC,topic,SmfTopic.class);
+                SmfTopic topicR = responseTopic.getBody();
 
                 msg.setIdTopic(topicR.getIdTopic()); msg.setIdMsgModified(msg.getIdMsg());
-                restTemplate.postForObject(Queries.UPDATE_REQUEST,msg,SmfMessage.class);
+                request = new HttpEntity<>(msg,header);
+                response = restTemplate.exchange(Queries.UPDATE_REQUEST,
+                        HttpMethod.POST,request, SmfMessage.class);
+                //restTemplate.postForObject(Queries.UPDATE_REQUEST,msg,SmfMessage.class);
             } catch (ResourceAccessException e) {
                 state = 2;
                 e.printStackTrace();

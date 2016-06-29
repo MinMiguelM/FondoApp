@@ -5,8 +5,12 @@ package tk.fondomon.persistence;
  */
 public class Queries {
 
+    // Credentials to interact with the server
+    public static String USERNAME = "";
+    public static String PASSWORD ="";
+
     // Host where is the server
-    final static String HOST = "http://192.168.0.15";
+    final static String HOST = "http://";
 
     // Port of the server, here the server receive the requests
     final static String PORT = "8181";

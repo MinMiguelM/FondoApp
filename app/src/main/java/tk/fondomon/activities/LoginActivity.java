@@ -17,7 +17,12 @@ import android.widget.EditText;
 
 import com.google.gson.Gson;
 
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMessage;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.ResourceAccessException;
@@ -173,11 +178,21 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             try {
-                // Simulate network access.
-                //Thread.sleep(2000);
+                String credentials = Queries.USERNAME+":"+Queries.PASSWORD;
+                byte[] credBytes = credentials.getBytes();
+                byte[] credBase64Bytes = Base64.encodeBase64(credBytes);
+                String credentials64 = new String (credBase64Bytes);
+
+                HttpHeaders header = new HttpHeaders();
+                header.add("Authorization", "Basic " + credentials64);
+
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-                user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + mUsername, SmfMember.class, "Android");
+                HttpEntity<String> request = new HttpEntity<>(header);
+                ResponseEntity<SmfMember> response = restTemplate.exchange(Queries.GET_USER_BY_USERNAME + mUsername,
+                        HttpMethod.GET,request, SmfMember.class);
+                //user = restTemplate.getForObject(Queries.GET_USER_BY_USERNAME + mUsername, SmfMember.class, "Android");
+                user = response.getBody();
 
                 if (user == null) {
                     state = 1;

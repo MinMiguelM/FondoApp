@@ -21,6 +21,11 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 
+import org.apache.commons.codec.binary.Base64;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
@@ -182,13 +187,30 @@ public class RequestActivity extends AppCompatActivity {
         @Override
         protected Boolean doInBackground(String... params) {
             try {
+                String credentials = Queries.USERNAME+":"+Queries.PASSWORD;
+                byte[] credBytes = credentials.getBytes();
+                byte[] credBase64Bytes = Base64.encodeBase64(credBytes);
+                String credentials64 = new String (credBase64Bytes);
+
+                HttpHeaders header = new HttpHeaders();
+                header.add("Authorization", "Basic " + credentials64);
+
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+                HttpEntity<String> request = new HttpEntity<>(header);
+                ResponseEntity<SmfMessage[]> response = null;
                 SmfMessage messages[] = null;
-                if (inception.equals("1"))
-                    messages = restTemplate.getForObject(Queries.GET_REQUESTS_BY_IDMEMBER + user.getIdMember(), SmfMessage[].class, "Android");
-                else
-                    messages = restTemplate.getForObject(Queries.GET_ALL_REQUESTS, SmfMessage[].class, "Android");
+                if (inception.equals("1")) {
+                    response = restTemplate.exchange(Queries.GET_REQUESTS_BY_IDMEMBER + user.getIdMember(),
+                            HttpMethod.GET,request, SmfMessage[].class);
+                    messages = response.getBody();
+                    //messages = restTemplate.getForObject(Queries.GET_REQUESTS_BY_IDMEMBER + user.getIdMember(), SmfMessage[].class, "Android");
+                }else {
+                    response = restTemplate.exchange(Queries.GET_ALL_REQUESTS,
+                            HttpMethod.GET,request, SmfMessage[].class);
+                    messages = response.getBody();
+                    //messages = restTemplate.getForObject(Queries.GET_ALL_REQUESTS, SmfMessage[].class, "Android");
+                }
                 if(messages == null) {
                     state = 1; // no hay nada
                     return false;
@@ -277,7 +299,19 @@ public class RequestActivity extends AppCompatActivity {
                 restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
                 restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
                 restTemplate.getMessageConverters().add(new FormHttpMessageConverter());
-                restTemplate.postForObject(Queries.UPDATE_REQUEST,mes,SmfMessage.class);
+
+                String credentials = Queries.USERNAME+":"+Queries.PASSWORD;
+                byte[] credBytes = credentials.getBytes();
+                byte[] credBase64Bytes = Base64.encodeBase64(credBytes);
+                String credentials64 = new String (credBase64Bytes);
+
+                HttpHeaders header = new HttpHeaders();
+                header.add("Authorization", "Basic " + credentials64);
+
+                HttpEntity<SmfMessage> request = new HttpEntity<>(mes,header);
+                ResponseEntity<SmfMessage> response = restTemplate.exchange(Queries.UPDATE_REQUEST,
+                        HttpMethod.POST,request, SmfMessage.class);
+                //restTemplate.postForObject(Queries.UPDATE_REQUEST,mes,SmfMessage.class);
             } catch (ResourceAccessException ex) {
                 ex.printStackTrace();
                 state = 2;
