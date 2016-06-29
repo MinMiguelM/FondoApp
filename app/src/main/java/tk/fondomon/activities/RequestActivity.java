@@ -328,7 +328,8 @@ public class RequestActivity extends AppCompatActivity {
             if (success) {
                 showProgress(null, false);
                 Toast.makeText(getApplicationContext(),getString(R.string.msg_notify) , Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(act, MainActivity.class);
+                act.finish();
+                Intent intent = act.getIntent();
                 intent.putExtra("user",user);
                 startActivity(intent);
             } else {

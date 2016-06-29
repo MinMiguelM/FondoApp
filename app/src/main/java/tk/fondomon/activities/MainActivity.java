@@ -181,19 +181,6 @@ public class MainActivity extends AppCompatActivity
             progress = ProgressDialog.show(this, null, message, true);
     }
 
-    /**
-     * Display ads, to test use emulators.
-     * To show real ads, delete addTestDevice methods.
-     */
-    private void requestNewInterstitial() {
-        AdRequest request = new AdRequest.Builder()
-                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
-                .addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-                .build();
-        //showProgress(getString(R.string.msg_loading),true);
-        mInterstitialAd.loadAd(request);
-    }
-
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -299,9 +286,9 @@ public class MainActivity extends AppCompatActivity
          */
         private void requestNewInterstitial() {
             AdRequest request = new AdRequest.Builder()
-                    .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
+                    //.addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
                     //.addTestDevice("AC98C820A50B4AD8A2106EDE96FB87D4")  // An example device ID
-                    .addTestDevice("AF79F6CAA42A0FEDB02F59215897D735")
+                    //.addTestDevice("AF79F6CAA42A0FEDB02F59215897D735")
                     .build();
             //showProgress("Loading...",true);
             mInterstitialAd.loadAd(request);

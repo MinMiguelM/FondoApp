@@ -4,9 +4,9 @@
     <!-- Nombres cuando el idioma está en español -->
 
     <!-- Banner info -->
-    <!-- real
-    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string> -->
-    <!-- to make tests -->
+    <!-- real -->
+    <string name="banner_ad_unit_id">ca-app-pub-1401896674818750/6547724623</string>
+    <!-- to make tests
     <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/1033173712</string> -->
 
     <!-- titles activities -->
