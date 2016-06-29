@@ -93,7 +93,7 @@ public class RequestsData extends BaseAdapter {
                 +state);
         if(state.equals("Espera")) // color naranja
             holder.state_text.setTextColor(Color.parseColor("#DC8A2D"));
-        else if(state.equals("Terminado")) // color negro
+        else if(state.equals("Cancelado")) // color negro
             holder.state_text.setTextColor(Color.BLACK);
         else if(state.equals("Activo")) // verde
             holder.state_text.setTextColor(Color.parseColor("#2DDC32"));
