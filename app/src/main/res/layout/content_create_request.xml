@@ -52,6 +52,12 @@
                         android:hint="@string/amount_money"
                         android:inputType="number"/>
                 </android.support.design.widget.TextInputLayout>
+                <TextView
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_limit"
+                    android:textStyle="bold"
+                    android:textSize="17dp"/>
                 <Spinner
                     android:id="@+id/spinnerTimeLimit"
                     android:layout_width="fill_parent"
